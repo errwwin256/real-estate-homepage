@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
-// Gallery and homepage component
 export default function HomePage() {
-  // Gallery images and state
+  const [menuOpen, setMenuOpen] = useState(false); // 🧩 Add this
+  const [current, setCurrent] = useState(null);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  // Gallery images (from /public)
   const images = [
-    "/assesment11.webp",
-    "/assesment12.webp",
-    "/assesment13.webp",
-    "/assesment14.webp",
-    "/assesment15.webp",
-    "/assesment16.webp",
-    "/assesment17.webp",
+    "assesment11.webp",
+    "assesment12.webp",
+    "assesment13.webp",
+    "assesment14.webp",
+    "assesment15.webp",
+    "assesment16.webp",
+    "assesment17.webp",
   ];
 
-  const [current, setCurrent] = useState(null);
-  const [menuOpen, setMenuOpen] = useState(false);
+  // Lightbox navigation
+  const nextImage = () =>
+    setCurrent((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  const prevImage = () =>
+    setCurrent((prev) => (prev === 0 ? images.length - 1 : prev - 1));
 
   // Keyboard controls for lightbox
   useEffect(() => {
@@ -27,35 +33,37 @@ export default function HomePage() {
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current]);
 
-  const nextImage = () => setCurrent((prev) => (prev + 1) % images.length);
-  const prevImage = () =>
-    setCurrent((prev) => (prev - 1 + images.length) % images.length);
+  // Pagination setup
+  const itemsPerPage = 5;
+  const totalPages = Math.ceil(images.length / itemsPerPage);
+  const startIndex = currentPage * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const visibleImages = images.slice(startIndex, endIndex);
 
   return (
     <div className="bg-[#0d1117] text-white font-sans scroll-smooth">
       {/* ✨ Frosted Midnight Navbar */}
       <nav className="fixed top-0 left-0 w-full backdrop-blur-xl bg-[#0d1117]/75 border-b border-[#b87333]/40 shadow-[0_2px_10px_rgba(0,0,0,0.6)] z-50">
-        <div className="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 sm:py-3 flex justify-between items-center">
           {/* 🏠 Logo Area */}
           <div className="flex items-center">
             <div
               className="relative flex justify-center items-center 
-              w-48 h-28 rounded-2xl overflow-hidden
-              bg-gradient-to-br from-[#f2e8d5]/60 via-[#e1c79b]/45 to-[#b87333]/35
-              backdrop-blur-3xl border border-[#b87333]/40
-              shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_1px_4px_rgba(255,255,255,0.3)]
-              before:absolute before:inset-0 before:bg-[linear-gradient(120deg,rgba(255,255,255,0.3)_0%,transparent_60%)] overflow-hidden"
+          w-28 h-16 sm:w-36 sm:h-20 md:w-48 md:h-28 rounded-2xl overflow-hidden
+          bg-gradient-to-br from-[#f2e8d5]/60 via-[#e1c79b]/45 to-[#b87333]/35
+          backdrop-blur-3xl border border-[#b87333]/40
+          shadow-[0_4px_16px_rgba(0,0,0,0.4),inset_0_1px_4px_rgba(255,255,255,0.3)]
+          before:absolute before:inset-0 before:bg-[linear-gradient(120deg,rgba(255,255,255,0.3)_0%,transparent_60%)] overflow-hidden"
             >
               <span
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent 
-                translate-x-[-100%] animate-[shine_4s_linear_infinite]"
+            translate-x-[-100%] animate-[shine_4s_linear_infinite]"
               ></span>
 
               <img
-                src="/logoassesment.webp"
+                src="logoassesment.webp"
                 alt="GoldenKey Logo"
                 className="w-full h-full object-contain drop-shadow-[0_4px_8px_rgba(0,0,0,0.6)] saturate-[1.25] contrast-[1.2]"
               />
@@ -121,7 +129,7 @@ export default function HomePage() {
       </nav>
 
       {/* 👇 Spacer to prevent content from being hidden under navbar */}
-      <div className="pt-32"></div>
+      <div className="pt-28 sm:pt-32"></div>
 
       {/* 🏡 Hero + Agent Section */}
       <section
@@ -132,7 +140,7 @@ export default function HomePage() {
         {/* 🖼️ Background Image */}
         <div className="absolute inset-0">
           <img
-            src="/assesment1.webp"
+            src="assesment1.webp"
             alt="Dream Home Background"
             className="w-full h-full object-cover opacity-40"
           />
@@ -173,7 +181,7 @@ export default function HomePage() {
         <div className="relative z-10 flex flex-col items-center text-center lg:text-left lg:items-center">
           <div className="w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-[#e6c67a] shadow-lg">
             <img
-              src="/assesment2.webp"
+              src="assesment2.webp"
               alt="Real Estate Agent"
               className="w-full h-full object-cover"
             />
@@ -213,17 +221,17 @@ export default function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-7xl mx-auto">
           {[
             {
-              img: "/assesment3.webp",
+              img: "assesment3.webp",
               title: "Top Residential Sales Last 5 Years",
               desc: "We helped nearly 90 clients in 2021, and closed 28.5 million in sales! Our team works hard everyday to grow and learn, so that we may continue to excel in our market. Our clients deserve our best, & we want to make sure our best is better every year.",
             },
             {
-              img: "/assesment4.webp",
+              img: "assesment4.webp",
               title: "Don’t Just List it... Get it SOLD!",
               desc: "We exhaust every avenue to ensure our listings are at the fingertips of every possible buyer, getting you top dollar for your home.",
             },
             {
-              img: "/assesment5.webp",
+              img: "assesment5.webp",
               title: "Guide to Buyers",
               desc: "Nobody knows the market like we do. Enjoy having a pro at your service. Market analysis, upgrades lists, contractors on speed dial, & more!",
             },
@@ -260,7 +268,7 @@ export default function HomePage() {
         {/* 🖼️ Background Image */}
         <div className="absolute inset-0">
           <img
-            src="/assesment6.webp"
+            src="assesment6.webp"
             alt="Luxury Home"
             className="w-full h-full object-cover opacity-30"
           />
@@ -384,25 +392,25 @@ export default function HomePage() {
     gap-10 sm:gap-16 md:gap-24 px-6 sm:px-10 md:px-12 text-center"
         >
           <img
-            src="/assesment7.webp"
+            src="assesment7.webp"
             alt="Company 1"
             className="h-20 sm:h-28 md:h-32 w-auto object-contain 
       hover:scale-110 transition-transform duration-500 ease-out"
           />
           <img
-            src="/assesment8.webp"
+            src="assesment8.webp"
             alt="Company 2"
             className="h-20 sm:h-28 md:h-32 w-auto object-contain 
       hover:scale-110 transition-transform duration-500 ease-out"
           />
           <img
-            src="/assesment9.webp"
+            src="assesment9.webp"
             alt="Company 3"
             className="h-20 sm:h-28 md:h-32 w-auto object-contain 
       hover:scale-110 transition-transform duration-500 ease-out"
           />
           <img
-            src="/assesment10.webp"
+            src="assesment10.webp"
             alt="Company 4"
             className="h-20 sm:h-28 md:h-32 w-auto object-contain 
       hover:scale-110 transition-transform duration-500 ease-out"
@@ -412,36 +420,30 @@ export default function HomePage() {
 
       {/* 🏡 Property Gallery Section */}
       <section className="relative py-24 bg-gradient-to-b from-[#fffdf8] via-[#fffaf0] to-[#fff9e6] overflow-hidden">
-        {/* 🌟 Elegant Gold Accent Bar */}
+        {/* 🌟 Gold Accent Line */}
         <div className="absolute top-0 left-0 w-full h-3 sm:h-4 bg-gradient-to-r from-[#c9a44b] via-[#e6c67a] to-[#c9a44b] shadow-[0_4px_20px_rgba(230,198,122,0.4)] z-20" />
-        <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-[#e6c67a]/25 via-transparent to-transparent blur-xl opacity-70 pointer-events-none" />
-
-        {/* ✨ Soft Gold Glow Behind Section */}
-        <div className="absolute inset-0 bg-gradient-radial from-[#e6c67a]/25 via-transparent to-transparent blur-3xl opacity-70 pointer-events-none" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 md:px-10 text-center">
-          {/* 🏷️ Section Title */}
           <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#b08a3f] mb-12 tracking-tight">
             Explore Our Featured Properties
           </h3>
 
-          {/* 🖼️ Modern Masonry-Like Grid */}
+          {/* 🖼️ Responsive Grid */}
           <div
-            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 
-      gap-4 sm:gap-6 md:gap-8"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 
+      gap-4 sm:gap-6 md:gap-8 justify-items-center"
           >
-            {images.map((src, idx) => (
+            {visibleImages.map((src, idx) => (
               <div
                 key={idx}
-                className="relative group overflow-hidden rounded-2xl shadow-md hover:shadow-2xl transition-all duration-500 bg-white"
-                onClick={() => setCurrent(idx)}
+                className="relative group overflow-hidden rounded-2xl shadow-md hover:shadow-2xl transition-all duration-500 bg-white w-full max-w-[300px]"
+                onClick={() => setCurrent(startIndex + idx)}
               >
                 <img
                   src={src}
-                  alt={`Gallery ${idx + 1}`}
+                  alt={`Property ${startIndex + idx + 1}`}
                   loading="lazy"
-                  className="w-full h-64 sm:h-72 md:h-80 lg:h-96 object-cover 
-            transform group-hover:scale-110 transition-transform duration-700 ease-out"
+                  className="w-full h-60 sm:h-72 md:h-80 object-cover transform group-hover:scale-110 transition-transform duration-700 ease-out"
                 />
 
                 {/* 🩶 Overlay */}
@@ -450,13 +452,28 @@ export default function HomePage() {
             opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-end justify-center"
                 >
                   <span className="text-white text-sm sm:text-base md:text-lg font-medium mb-4 tracking-wide">
-                    Luxury Property #{idx + 1}
+                    Luxury Property #{startIndex + idx + 1}
                   </span>
                 </div>
-
-                {/* ✨ Gold Border on Hover */}
                 <div className="absolute inset-0 border-2 border-transparent group-hover:border-[#e6c67a]/80 rounded-2xl transition-all duration-500" />
               </div>
+            ))}
+          </div>
+
+          {/* 🔢 Pagination Buttons */}
+          <div className="flex justify-center items-center gap-3 mt-10 flex-wrap">
+            {Array.from({ length: totalPages }).map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentPage(i)}
+                className={`w-10 h-10 rounded-full font-semibold transition-all duration-300 ${
+                  i === currentPage
+                    ? "bg-[#e6c67a] text-[#0d1b2a] scale-110 shadow-lg"
+                    : "bg-[#f9f4e3] text-[#b08a3f] hover:bg-[#e6c67a]/70 hover:text-[#0d1b2a]"
+                }`}
+              >
+                {i + 1}
+              </button>
             ))}
           </div>
         </div>
@@ -464,7 +481,6 @@ export default function HomePage() {
         {/* 💡 Lightbox Modal */}
         {current !== null && (
           <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 transition-all duration-300">
-            {/* 🖼️ Full Image */}
             <img
               src={images[current]}
               alt={`Full Gallery ${current + 1}`}
@@ -523,17 +539,17 @@ export default function HomePage() {
             {
               title: "Real Estate Done Right",
               text: "Nervous about your property adventure? Don’t be. Whether you're getting ready to buy or sell your residence, looking at investment properties, or just curious about the markets, our team ensures you get the best experience possible!",
-              img: "/assesment18.webp",
+              img: "assesment18.webp",
             },
             {
               title: "Commercial & Residential",
               text: "Large or small, condo or mansion, we can find it and get at the price that's right. Fixer-uppers? Luxury? We can help with all of it! We live, work, and play in this community. Happy to help you find where to put you hard-earned dollars.",
-              img: "/assesment19.webp",
+              img: "assesment19.webp",
             },
             {
               title: "Rely on Expertise",
               text: "If you have questions about affordability, credit, and loan options, trust us to connect you with the right people to get the answers you need in a timely fashion. We make sure you feel confident and educated every step of the way.",
-              img: "/assesment20.webp",
+              img: "assesment20.webp",
             },
           ].map((service, i) => (
             <div
