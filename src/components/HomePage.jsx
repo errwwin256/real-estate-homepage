@@ -1,27 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { SiWhatsapp } from "react-icons/si";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
-import {
-  MapPin,
-  Phone,
-  Mail,
-  Search,
-  Home,
-  Building2,
-  KeyRound,
-} from "lucide-react";
 
 // Gallery and homepage component
 export default function HomePage() {
   // Gallery images and state
   const images = [
-    "/images/assesment11.webp",
-    "/images/assesment12.webp",
-    "/images/assesment13.webp",
-    "/images/assesment14.webp",
-    "/images/assesment15.webp",
-    "/images/assesment16.webp",
-    "/images/assesment17.webp",
+    "/assesment11.webp",
+    "/assesment12.webp",
+    "/assesment13.webp",
+    "/assesment14.webp",
+    "/assesment15.webp",
+    "/assesment16.webp",
+    "/assesment17.webp",
   ];
 
   const [current, setCurrent] = useState(null);
